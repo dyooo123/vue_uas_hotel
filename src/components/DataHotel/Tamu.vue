@@ -23,6 +23,9 @@
         <template v-slot:[`item.id_kamar`]="{item}">
           <div v-if="item.id_kamar==1">VIP</div>
           <div v-if="item.id_kamar==2">Standard</div>
+          <div v-if="item.id_kamar==3">Deluxe</div>
+          <div v-if="item.id_kamar==4">Suite</div>
+          <div v-if="item.id_kamar==5">Family</div>
         </template>
 
           <template v-slot:[`item.actions`]="{item}">
@@ -56,7 +59,7 @@
             <v-text-field v-model="form.tanggal_lahir" label="Tanggal Lahir" required></v-text-field>
             <v-text-field v-model="form.tgl_checkin" label="Tanggal Check In" required></v-text-field>
             <v-text-field v-model="form.tgl_checkout" label="Tanggal Check Out" required></v-text-field>
-            <v-select return object :items="Kamars" item-value="id" item-text="tipe_kamar" v-mode="form.id_kamar" @change="select_value"></v-select>
+            <v-select return object :items="Kamars" item-value="id" label="Tipe kamar" item-text="tipe_kamar" v-mode="form.id_kamar" @change="select_value"></v-select>
           </v-container>
         </v-card-text>
         <v-card-actions>
