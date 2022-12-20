@@ -1,7 +1,7 @@
 <template>
   <v-main class="kamar" >
     <h3 class="text-h3 font-weight-medium mb-5" style=" color:#3C2317">DAFTAR KAMAR</h3>
-    
+
     <v-card>
       <v-card-title>
         <v-text-field
@@ -34,7 +34,7 @@
         </template> -->
       </v-data-table>
     </v-card>
-    
+
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card color="brown lighten-5">
         <v-card-title>
@@ -135,7 +135,7 @@ export default {
       this.kamar.append('tipe_kamar',this.form.tipe_kamar);
       this.kamar.append('tipe_kasur',this.form.tipe_kasur);
 
-      var url= this.$api + '/kamars/'
+      var url= this.$api + '/kamars'
       this.load = true;
       this.$http.post(url, this.kamar, {
         headers: {

@@ -1,7 +1,7 @@
 <template>
   <v-main class="list">
     <h3 class="text-h3 font-weight-medium mb-5" style=" color:#3C2317">DAFTAR KARYAWAN</h3>
-    
+
     <v-card>
       <v-card-title>
         <v-text-field
@@ -34,7 +34,7 @@
         </template> -->
       </v-data-table>
     </v-card>
-    
+
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card color="brown lighten-5">
         <v-card-title>
@@ -47,7 +47,7 @@
             <v-text-field v-model="form.alamat" label="Alamat" required></v-text-field>
             <v-text-field v-model="form.no_telp" label="Nomor Telepon" required></v-text-field>
             <v-text-field v-model="form.gaji" label="Gaji" required></v-text-field>
-            
+
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -143,8 +143,7 @@ export default {
       this.karyawan.append('alamat',this.form.alamat);
       this.karyawan.append('no_telp', this.form.no_telp);
       this.karyawan.append('gaji', this.form.gaji);
-
-      var url= this.$api + '/karyawans/'
+      var url= this.$api + '/karyawans'
       this.load = true;
       this.$http.post(url, this.karyawan, {
         headers: {
