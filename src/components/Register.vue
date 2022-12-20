@@ -13,6 +13,7 @@
                       <h1
                         class="text-center text--accent-3 mb-12"
                         style="font-size:48px"
+                        @click="submit"
                         
                       >Register</h1>
                       <div class="text-center mt-4">
@@ -22,9 +23,19 @@
                         </v-btn>
                       </div>
                       <h4 class="text-center mt-4">Ensure your email for registration</h4>
-                      <v-form>
+                      <v-form ref="form">
                         
                         <v-text-field
+                          v-model="name"
+                          label="Name"
+                          name="Name"
+                          type="text"
+                          color="black accent-3"
+                        >
+                        </v-text-field>
+
+                        <v-text-field
+                          v-model="email"
                           label="Email"
                           name="Email"
                           type="text"
@@ -33,6 +44,7 @@
                         </v-text-field>
                       
                         <v-text-field
+                          v-model="password"
                           id="password"
                           label="Password"
                           name="password"
@@ -42,8 +54,9 @@
                         />
                         
                       </v-form>
-                      <v-btn rounded color="brown darken-4
-                      " dark>REGISTER</v-btn>
+                      <v-btn rounded color="brown darken-4" 
+                      @click="submit"
+                      dark>REGISTER</v-btn>
                       <h3 class="text-center mt-4">Sudah Punya Akun?</h3>
                       <div class="text-center mt-3">
                         <v-btn @click="login" rounded color="brown accent-3" dark>LOGIN</v-btn>
@@ -87,10 +100,6 @@ export default {
       valid: false,
       name: '',
       nameRules: [(v) => !!v || "Nama tidak boleh kosong :("],
-      nomorIdentitas: '',
-      nomorIdentitasRules: [(v) => !!v || "Nomor identitas tidak boleh kosong :("],
-      username: '',
-      usernameRules: [(v) => !!v || "Username tidak boleh kosong :("],
       password: '',
       passwordRules: [(v) => !!v || "Password tidak boleh kosong :("],
       email: "",
@@ -105,8 +114,6 @@ export default {
         this.$http
           .post(this.$api + '/register', {
             name:this.name,
-            nomorIdentitas:this.nomorIdentitas,
-            username:this.username,
             email: this.email,
             password: this.password,
           })
@@ -120,7 +127,7 @@ export default {
             this.load = false;
             this.clear();
             this.$router.push({
-              name: "Dashboard",
+              name: "Login",
             });
           })
           .catch((error) => {
@@ -142,6 +149,9 @@ export default {
         name: "Home",
       });
     },
+    clear() {
+      this.$refs.form.reset();
+    }
   },
 };
 </script> 

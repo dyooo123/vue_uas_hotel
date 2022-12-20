@@ -15,17 +15,22 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="success" dark @click="dialog = true"> Tambah </v-btn>
+        <v-btn color="brown lighten-1" dark @click="dialog = true"> Tambah </v-btn>
 
       </v-card-title>
       <v-data-table :headers="headers" :items="Tamus" :search="search" color="black">
 
+        <template v-slot:[`item.id_kamar`]="{item}">
+          <div v-if="item.id_kamar==1">VIP</div>
+          <div v-if="item.id_kamar==2">Standard</div>
+        </template>
+
           <template v-slot:[`item.actions`]="{item}">
                 <v-btn icon small class="mr-2" @click="editHandler(item)">
-                  <v-icon color="red">mdi-pencil</v-icon>
+                  <v-icon color="green">mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn icon small @click="deleteHandler(item.id)">
-                     <v-icon color="green">mdi-delete</v-icon>
+                     <v-icon color="red">mdi-delete</v-icon>
                 </v-btn>
             </template>
 
@@ -37,22 +42,21 @@
     </v-card>
     
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card>
+      <v-card color="brown lighten-5">
         <v-card-title>
           <span class="headline" style="display:flex; justify-content:center;">{{formTitle}} tamu</span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-text-field v-model="form.namaTamu" label="Nama Tamu" required></v-text-field>
+            <v-text-field v-model="form.nama_tamu" label="Nama Tamu" required></v-text-field>
             <v-text-field v-model="form.email" label="Email" required></v-text-field>
-            <v-text-field v-model="form.jenisKelamin" label="Jenis Kelamin" required></v-text-field>
-            <v-text-field v-model="form.noTelp" label="Nomor Telepon" required></v-text-field>
+            <v-text-field v-model="form.jenis_kelamin" label="Jenis Kelamin" required></v-text-field>
+            <v-text-field v-model="form.no_telp" label="Nomor Telepon" required></v-text-field>
             <v-text-field v-model="form.alamat" label="Alamat" required></v-text-field>
-            <v-text-field v-model="form.tanggalLahir" label="Tanggal Lahir" required></v-text-field>
-            <v-text-field v-model="form.tanggalCheckin" label="Tanggal Check In" required></v-text-field>
-            <v-text-field v-model="form.tanggalCheckout" label="Tanggal Check Out" required></v-text-field>
-
-            
+            <v-text-field v-model="form.tanggal_lahir" label="Tanggal Lahir" required></v-text-field>
+            <v-text-field v-model="form.tgl_checkin" label="Tanggal Check In" required></v-text-field>
+            <v-text-field v-model="form.tgl_checkout" label="Tanggal Check Out" required></v-text-field>
+            <v-select return object :items="Kamars" item-value="id" item-text="tipe_kamar" v-mode="form.id_kamar" @change="select_value"></v-select>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -65,17 +69,17 @@
 
 
     <v-dialog v-model="dialogConfirm" persistent max-width="400px">
-      <v-card>
+      <v-card color="brown lighten-5">
         <v-card-title>
           <span class="headline">WARNING !</span>
         </v-card-title>
         <v-card-text> Anda yakin ingin menghapus tamu ini? </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogConfirm = false">
+          <v-btn color="brown darken-1" text @click="dialogConfirm = false">
             Cancel
           </v-btn>
-          <v-btn color="blue darken-1" text @click="deleteData"> Delete </v-btn>
+          <v-btn color="red darken-1" text @click="deleteData"> Delete </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -89,6 +93,9 @@
 <script>
 export default {
   name: "List",
+  setup(){
+    let kamars = ref([])
+  }, 
   data() {
     return {
       inputType: 'Tambah',
@@ -100,23 +107,30 @@ export default {
       dialog: false,
       dialogConfirm: false,
       headers: [
-        { text: "Nama Tamu", align: "start", sortable: true, value: "namaTamu"},
+        { text: "Nama Tamu", align: "start", sortable: true, value: "nama_tamu"},
         { text: "Email", value: 'email'},
-        { text: "Jenis Kelamin", value: 'jenisKelamin'},
-        { text: "Nomor Telepon", value: 'noTelp'},
+        { text: "Jenis Kelamin", value: 'jenis_kelamin'},
+        { text: "Nomor Telepon", value: 'no_telp'},
         { text: "Alamat", value: 'alamat'},
-        { text: "Tanggal Lahir", value: 'tanggalLahir'},
-        { text: "Tanggal Check In", value: 'tanggalCheckin'},
-        { text: "Tanggal Check Out", value: 'tanggalCheckout'},
+        { text: "Tanggal Lahir", value: 'tanggal_lahir'},
+        { text: "Tanggal Check In", value: 'tgl_checkin'},
+        { text: "Tanggal Check Out", value: 'tgl_checkout'},
+        { text: "Tipe Kamar", value: 'id_kamar'},
         { text: "Action", value:'actions'},
       ],
       tamu: new FormData,
       Tamus: [],
+      Kamars: [],
       form:{
-        namaPeminjam: null,
-        jumlahDenda: null,
-        Status: null,
-        TanggalPembayaran: null,
+        nama_tamu: null,
+        email: null,
+        jenis_kelamin: null,
+        no_telp: null,
+        alamat: null,
+        tanggal_lahir: null,
+        tgl_checkin: null,
+        tgl_checkout: null,
+
       },
       deleteId: '',
       editId: ''
@@ -124,17 +138,22 @@ export default {
   },
 
   methods: {
+    select_value(e) {
+      this.form.id_kamar = e
+    },
     setForm(){
       if(this.inputType !== 'Tambah'){
         this.update();
+        this.resetForm();
       }
       else{
         this.save();
+        this.resetForm();
       }
     },
 
     readData(){
-      var url = this.$api + '/tamu';
+      var url = this.$api + '/tamus';
       this.$http.get(url, {
         headers: {
           'Authorization' : 'Bearer ' + localStorage.getItem('token')
@@ -143,14 +162,28 @@ export default {
         this.Tamus = response.data.data;
       })
     },
+    readDataKamar(){
+      var url = this.$api + '/kamars';
+      this.$http.get(url, {
+        headers: {
+          'Authorization' : 'Bearer ' + localStorage.getItem('token')
+        }
+      }).then(response => {
+        this.Kamars = response.data.data;
+      })
+    },
 
     save(){
-      this.tamu.append('namaPeminjam',this.form.namaPeminjam);
-      this.tamu.append('jumlahDenda',this.form.jumlahDenda);
-      this.tamu.append('Status',this.form.Status);
-      this.tamu.append('TanggalPembayaran', this.form.TanggalPembayaran);
-
-      var url= this.$api + '/tamu/'
+      this.tamu.append('nama_tamu',this.form.nama_tamu);
+      this.tamu.append('email',this.form.email);
+      this.tamu.append('jenis_kelamin',this.form.jenis_kelamin);
+      this.tamu.append('no_telp', this.form.no_telp);
+      this.tamu.append('alamat', this.form.alamat);
+      this.tamu.append('tanggal_lahir', this.form.tanggal_lahir);
+      this.tamu.append('tgl_checkin', this.form.tgl_checkin);
+      this.tamu.append('tgl_checkout', this.form.tgl_checkout);
+      this.tamu.append('id_kamar',this.form.id_kamar)
+      var url= this.$api + '/tamus'
       this.load = true;
       this.$http.post(url, this.tamu, {
         headers: {
@@ -174,12 +207,17 @@ export default {
 
     update(){
       let newData = {
-        namaPeminjam : this.form.namaPeminjam,
-        jumlahDenda : this.form.jumlahDenda,
-        Status : this.form.Status,
-        TanggalPembayaran: this.form.TanggalPembayaran
+        nama_tamu : this.form.nama_tamu,
+        email : this.form.email,
+        jenis_kelamin : this.form.jenis_kelamin,
+        no_telp: this.form.no_telp,
+        alamat: this.form.alamat,
+        tanggal_lahir: this.form.tanggal_lahir,
+        tgl_checkin: this.form.tgl_checkin,
+        tgl_checkout: this.form.tgl_checkout,
+        id_kamar: this.form.id_kamar,
       };
-      var url = this.$api + '/tamu/' + this.editId;
+      var url = this.$api + '/tamus/' + this.editId;
       this.load = true;
       this.$http.put(url, newData, {
         headers: {
@@ -204,7 +242,7 @@ export default {
 
     deleteData() {
       //mengahapus data
-      var url = this.$api + '/tamu/' + this.deleteId;
+      var url = this.$api + '/tamus/' + this.deleteId;
       //data dihapus berdasarkan id
       this.$http.delete(url, {
           headers: {
@@ -232,10 +270,15 @@ export default {
     editHandler(item){
       this.inputType = 'Ubah';
       this.editId = item.id;
-      this.form.namaPeminjam = item.namaPeminjam;
-      this.form.jumlahDenda = item.jumlahDenda;
-      this.form.Status = item.Status;
-      this.form.TanggalPembayaran = item.TanggalPembayaran;
+      this.form.nama_tamu = item.nama_tamu;
+      this.form.email = item.email;
+      this.form.jenis_kelamin = item.jenis_kelamin;
+      this.form.no_telp = item.no_telp;
+      this.form.alamat = item.alamat,
+      this.form.tanggal_lahir = item.tanggal_lahir,
+      this.form.tgl_checkin = item.tgl_checkin,
+      this.form.tgl_checkout = item.tgl_checkout,
+      this.form.id_kamar = item.id_kamar,
       this.dialog = true;
     },
 
@@ -258,10 +301,15 @@ export default {
     },
     resetForm() {
       this.form = {
-        namaPeminjam: null,
-        jumlahDenda: null,
-        Status: null,
-        TanggalPembayaran: null,
+        nama_tamu: null,
+        email: null,
+        jenis_kelamin: null,
+        no_telp: null,
+        alamat: null,
+        tanggal_lahir: null,
+        tgl_checkin: null,
+        tgl_checkout: null,
+        id_kamar: null
       };
     },
   },
@@ -272,6 +320,7 @@ export default {
   },
   mounted() {
     this.readData();
+    this.readDataKamar();
   },
 };
 </script>

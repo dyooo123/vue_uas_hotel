@@ -32,9 +32,10 @@
                             <v-icon>mdi-twitter</v-icon>
                           </v-btn>
                         </div>
-                        <v-form>
+                        <v-form ref="form">
                           
                           <v-text-field
+                            v-model="email"
                             label="Email"
                             name="Email"
                             type="text"
@@ -43,6 +44,7 @@
                           </v-text-field>
                         
                           <v-text-field
+                            v-model="password"
                             id="password"
                             label="Password"
                             name="password"
@@ -52,7 +54,9 @@
                           />
                           
                         </v-form>
-                        <v-btn rounded color="brown darken-4
+                        <v-btn rounded 
+                        @click="submit"
+                        color="brown darken-4
                         " dark>LOGIN</v-btn>
                         <h3 class="text-center mt-4">Belum Punya Akun?</h3>
                         <div class="text-center mt-3">
@@ -106,7 +110,7 @@ export default {
           })
           .then((response) => {
             localStorage.setItem("id", response.data.user.id); //menyimpan id user yang sedang login
-            localStorage.setItem("token", response.data.access_token);
+            localStorage.setItem("token", response.data.token);
             //menyimpan auth token
             this.error_message = response.data.message;
             this.color = "green";
@@ -118,7 +122,7 @@ export default {
             });
           })
           .catch((error) => {
-            this.error_message = error.response.data.message;
+            // this.error_message = error.data.response.message;
             this.color = "red";
             this.snackbar = true;
             localStorage.removeItem("token");
@@ -142,6 +146,9 @@ export default {
         this.$router.push("/login");
       }
     },
+    clear() {
+      this.$refs.form.reset();
+    }
   },
   mounted() {
     this.showVerified();

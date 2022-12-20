@@ -6,7 +6,7 @@
           <v-col  v-for="card in cards"
           :cols="card.flex"
            cols="12" md="4">
-              <v-card :Loading="loading" class="mx-auto my-12" max-width="374" color="grey lighten-4">
+              <v-card :Loading="loading" class="mx-auto my-12" max-width="374" color="brown lighten-5">
               <v-img
                   height="250px"
                   :src="card.src"

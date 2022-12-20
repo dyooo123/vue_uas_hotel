@@ -1,6 +1,6 @@
 <template>
   <v-main class="list">
-    <h3 class="text-h3 font-weight-medium mb-5" style=" color:#3C2317">DAFTAR KARYAWAN</h3>
+    <h3 class="text-h3 font-weight-medium mb-5">Daftar Pengguna</h3>
     
     <v-card>
       <v-card-title>
@@ -14,12 +14,13 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="success" dark @click="dialog = true"> Tambah </v-btn>
+        <v-btn color="green darken-3
+        " dark @click="dialog = true"> Tambah </v-btn>
 
       </v-card-title>
-      <v-data-table :headers="headers" :items="Karyawans" :search="search">
+      <v-data-table :headers="headers" :items="users" :search="search">
 
-          <template v-slot:[`item.actions`]="{item}">
+        <template v-slot:[`item.actions`]="{item}">
                 <v-btn icon small class="mr-2" @click="editHandler(item)">
                   <v-icon color="red">mdi-pencil</v-icon>
                 </v-btn>
@@ -27,33 +28,27 @@
                      <v-icon color="green">mdi-delete</v-icon>
                 </v-btn>
             </template>
-
-        <!-- <template v-slot:[`item.actions`]="{ item }">
-          <v-btn small class="mr-2" @click="editHandler(item)"> edit </v-btn>
-          <v-btn small @click="deleteHandler(item.id)"> delete </v-btn>
-        </template> -->
       </v-data-table>
     </v-card>
     
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{formTitle}} Karyawan</span>
+          <span class="headline">{{formTitle}} Pengguna</span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-text-field v-model="form.namaKaryawan" label="Nama Karyawan" required></v-text-field>
-            <v-text-field v-model="form.jenisKelamin" label="Jenis Kelamin" required></v-text-field>
-            <v-text-field v-model="form.alamat" label="Alamat" required></v-text-field>
-            <v-text-field v-model="form.noTelp" label="Nomor Telepon" required></v-text-field>
-            <v-text-field v-model="form.gaji" label="Gaji" required></v-text-field>
-            
+            <v-text-field v-model="form.name" label="Name" required></v-text-field>
+            <v-text-field v-model="form.email" label="Email" required></v-text-field>
+             <v-text-field v-model="form.nomorIdentitas" label="Nomor Identitas" required></v-text-field>
+              <v-text-field v-model="form.username" label="Username" required></v-text-field>
+            <v-text-field type="password" v-model="form.password" label="Password" required></v-text-field>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text @click="cancel"> Cancel </v-btn>
-          <v-btn color="green darken-1" text @click="setForm"> Save </v-btn>
+          <v-btn color="blue darken-1" text @click="cancel"> Cancel </v-btn>
+          <v-btn color="blue darken-1" text @click="setForm"> Save </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -62,15 +57,15 @@
     <v-dialog v-model="dialogConfirm" persistent max-width="400px">
       <v-card>
         <v-card-title>
-          <span class="headline">WARNING!!</span>
+          <span class="headline">warning!</span>
         </v-card-title>
-        <v-card-text> Anda yakin ingin menghapus Karyawan ini? </v-card-text>
+        <v-card-text> Anda yakin ingin menghapus pengguna ini? </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialogConfirm = false">
             Cancel
           </v-btn>
-          <v-btn color="red darken-1" text @click="deleteData"> Delete </v-btn>
+          <v-btn color="blue darken-1" text @click="deleteData"> Delete </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -95,21 +90,21 @@ export default {
       dialog: false,
       dialogConfirm: false,
       headers: [
-        { text: "Nama Karyawan", align: "start", sortable: true, value: "namaKaryawan"},
-        { text: "Jenis Kelamin", value: 'jenisKelamin'},
-        { text: "Alamat", value: 'alamat'},
-        { text: "Nomor Telepon", value: 'noTelp'},
-        { text: "Gaji", value: 'gaji'},
-        { text: "Action", value:'actions'},
+        { text: "Name", align: "start", sortable: true, value: "name"},
+        { text: "Email", value: 'email'},
+        { text: "Nomor Identitas", value: 'nomorIdentitas'},
+        { text: "Username", value: 'username'},
+        // { text: "Password", value: 'password'},
+        { text: "Action", value: 'actions'}
       ],
-      karyawan: new FormData,
-      Karyawans: [],
+      user: new FormData,
+      users: [],
       form:{
-        namaKaryawan: null,
-        jenisKelamin: null,
-        alamat: null,
-        noTelp: null,
-        gaji: null,
+        name: null,
+        email: null,
+        nomorIdentitas: null,
+        username: null,
+        password: null,
       },
       deleteId: '',
       editId: ''
@@ -127,26 +122,26 @@ export default {
     },
 
     readData(){
-      var url = this.$api + '/karyawan';
+      var url = this.$api + '/users';
       this.$http.get(url, {
         headers: {
           'Authorization' : 'Bearer ' + localStorage.getItem('token')
         }
       }).then(response => {
-        this.Karyawans = response.data.data;
+        this.users = response.data.data;
       })
     },
 
     save(){
-      this.karyawan.append('namaKaryawan',this.form.namaKaryawan);
-      this.karyawan.append('jenisKelamin',this.form.jenisKelamin);
-      this.karyawan.append('alamat',this.form.alamat);
-      this.karyawan.append('noTelp', this.form.noTelp);
-      this.karyawan.append('gaji', this.form.gaji);
+      this.user.append('name',this.form.name);
+      this.user.append('email',this.form.email);
+      this.user.append('nomorIdentitas',this.form.nomorIdentitas);
+      this.user.append('username',this.form.username);
+      this.user.append('password',this.form.password);
 
-      var url= this.$api + '/karyawan/'
+      var url= this.$api + '/users/'
       this.load = true;
-      this.$http.post(url, this.karyawan, {
+      this.$http.post(url, this.user, {
         headers: {
           'Authorization' : 'Bearer ' + localStorage.getItem('token'),
         }
@@ -168,13 +163,13 @@ export default {
 
     update(){
       let newData = {
-        namaKaryawan : this.form.namaKaryawan,
-        jenisKelamin : this.form.jenisKelamin,
-        alamat : this.form.alamat,
-        noTelp: this.form.noTelp,
-        gaji: this.form.gaji
+        name : this.form.name,
+        email : this.form.email,
+        nomorIdentitas: this.form.nomorIdentitas,
+        username: this.form.username,
+        password : this.form.password
       };
-      var url = this.$api + '/karyawan/' + this.editId;
+      var url = this.$api + '/users/' + this.editId;
       this.load = true;
       this.$http.put(url, newData, {
         headers: {
@@ -199,7 +194,7 @@ export default {
 
     deleteData() {
       //mengahapus data
-      var url = this.$api + '/karyawan/' + this.deleteId;
+      var url = this.$api + '/users/' + this.deleteId;
       //data dihapus berdasarkan id
       this.$http.delete(url, {
           headers: {
@@ -227,11 +222,11 @@ export default {
     editHandler(item){
       this.inputType = 'Ubah';
       this.editId = item.id;
-      this.form.namaKaryawan = item.namaKaryawan;
-      this.form.jenisKelamin = item.jenisKelamin;
-      this.form.alamat = item.alamat;
-      this.form.noTelp = item.noTelp;
-      this.form.gaji = item.gaji;
+      this.form.name = item.name;
+      this.form.email = item.email;
+      this.form.nomorIdentitas = item.nomorIdentitas;
+      this.form.username = item.username;
+      this.form.password = item.password;
       this.dialog = true;
     },
 
@@ -254,10 +249,9 @@ export default {
     },
     resetForm() {
       this.form = {
-        namaKaryawan: null,
-        jenisKelamin: null,
-        alamat: null,
-        noTelp: null,
+        name: null,
+        email: null,
+        password: null,
       };
     },
   },

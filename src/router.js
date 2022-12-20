@@ -25,31 +25,31 @@ const router = new VueRouter({
                     path: '/user',
                     name: 'User',
                     meta: {title : 'Users'},
-                    component: importComponent('DataMaster/User'),
+                    component: importComponent('DataHotel/User'),
                 },
                 {
                     path: '/kamar',
                     name: 'Kamar',
                     meta: {title : 'Kamars'},
-                    component: importComponent('DataMaster/Kamar'),
+                    component: importComponent('DataHotel/Kamar'),
                 },
                 {
                     path: '/tamu',
                     name: 'Tamu',
                     meta: {title : 'Tamus'},
-                    component: importComponent('DataMaster/Tamu'),
+                    component: importComponent('DataHotel/Tamu'),
                 },
                 {
                     path: '/karyawan',
                     name: 'Karyawan',
                     meta: {title : 'Karyawans'},
-                    component: importComponent('DataMaster/Karyawan'),
+                    component: importComponent('DataHotel/Karyawan'),
                 },
                 {
                     path: '/profile',
                     name: 'Profile',
                     meta: {title : 'Profiles'},
-                    component: importComponent('DataMaster/Profile'),
+                    component: importComponent('DataHotel/Profile'),
                 },
             ],
         },
@@ -82,15 +82,14 @@ const router = new VueRouter({
     ]
 });
 
-//Set Judul
-// router.beforeEach((to, from, next) => {
-//     if(to.name != "Login" && localStorage.getItem("token") == null && to.name!="Register" && to.name != "Home"){
-//         next('home')
-//         document.to.meta.title = "Home"
-//     }
+router.beforeEach((to, from, next) => {
+    if(to.name != "Login" && localStorage.getItem("token") == null && to.name!="Register" && to.name != "Home"){
+        next('home')
+        document.to.meta.title = "Home"
+    }
     
-//     document.title = to.meta.title;
-//     next();
-// });
+    document.title = to.meta.title;
+    next();
+});
 
 export default router;
