@@ -1,23 +1,24 @@
 <template>
   <v-main >
-   <img class="img" src="https://i.postimg.cc/XN2YCwVk/wp6957360-hotel-room-wallpapers.jpg" alt="Gambar Home" style="width: 100%"/>
-   <div class="text-left" style="color: #fff; position: absolute; top: 30%; left: 20%; right: 20%">
-     <h1 style="color:#3C2317">HOTELIN AJA</h1>
+   <img class="img" src="https://i.postimg.cc/XN2YCwVk/wp6957360-hotel-room-wallpapers.jpg" alt="Gambar Home" style="width: 100%; opacity:10;"/>
+   <div class="overlay"></div>
+   <div class="text-left hero-content" style="color: #fff;">
+     <h1 style="color:#F9EBC8; font-size:64px; letter-spacing:4px" >HOTELIN AJA</h1>
      <br />
-     <h4 style="color:#3C2317">Pesan Hotel? HOTELIN AJA</h4>
+     <h4 style="color:#F9EBC8; font-size:24px; text-align: center; margin-top: -40px;">Pesan Hotel? HOTELIN AJA</h4>
 
-     <v-container>
-       <span class="mr-n10"></span>
-         <v-btn @click="login" :x-large="$vuetify.breakpoint.smAndUp"  color="brown lighten-4 "  class="my-200 mx-5 " 
-           >Login</v-btn
-         >  
-         <span class=""></span>
-         <v-btn @click="register" :x-large="$vuetify.breakpoint.smAndUp" color="brown darken-1
-         "  bold class="my-3"
-           >Register</v-btn
-         >     
-       </v-container>
-   </div>
+    </div>
+    <div class="button-container mt-3">
+      <span class="mr-n10"></span>
+        <v-btn @click="login" :x-large="$vuetify.breakpoint.smAndUp"  color="brown darken-5 "  class="my-200 mx-5 " 
+          >Login</v-btn
+        >  
+        <span class=""></span>
+        <v-btn @click="register" :x-large="$vuetify.breakpoint.smAndUp" color="brown lighten-3
+        "  bold class="my-3"
+          >Register</v-btn
+        >     
+    </div>
 
    <v-footer class="foot"
    dark
@@ -27,7 +28,7 @@
    <v-card
      flat
      tile
-     class="brown darken-3
+     class="brown darken-2
 
      1 white--text text-center"
    >
@@ -105,6 +106,29 @@ export default {
 </script>
 
 <style>
+
+.button-container {
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  right: 20px;
+}
+.hero-content {
+  position: absolute;
+  z-index: 999;
+  top: 35%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
 .gradient-fill .v-responsive__content {
  background: rgb(0, 0, 0);
  background: linear-gradient(
@@ -115,7 +139,8 @@ export default {
 }
 
 .img{
- height: 900px;
+ height: 100vh;
+ background-size: cover;
 }
 
 .foot{
